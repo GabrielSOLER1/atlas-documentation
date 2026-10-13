@@ -119,3 +119,11 @@ Une copie composée uniquement des fichiers publiables a démarré avec une base
 La commande locale `app:reset-password` a refusé un mot de passe trop court et un compte inexistant. Un renouvellement valide a invalidé la session précédente, refusé l’ancien mot de passe et permis la connexion avec le nouveau. Aucun mot de passe n’a été affiché dans les résultats.
 
 Les deux anciens accès du portail principal ont ensuite été renouvelés à la demande du propriétaire. Les nouvelles valeurs sont conservées uniquement dans le fichier privé `.env.credentials`, protégé en lecture et écriture pour son propriétaire et exclu du dépôt comme des images Docker. Les connexions HTTPS ont été vérifiées avec ces nouveaux accès. Le mot de passe de l’administrateur initial dans le `.env` local a également été synchronisé.
+
+### Publication et vérification du clone GitHub
+
+Les sources ont été publiées sur le dépôt privé [GabrielSOLER1/atlas-gabriel](https://github.com/GabrielSOLER1/atlas-gabriel), branche `main`. Les fichiers du premier commit ont été contrôlés : aucun secret privé, ancien mot de passe, certificat privé ou export SQL n’est inclus.
+
+Un vrai clone du dépôt a démarré dans le projet isolé `atlas-git-clone-check`. Les services étaient sains ; le certificat HTTPS, les redirections, les cookies, les protections des accès anonymes et la 404 ont été vérifiés. La connexion avec l’administrateur généré sur cette installation a réussi ; la base contenait un administrateur et les deux guides initiaux. Les conteneurs et données de vérification ont été supprimés après les contrôles.
+
+Une invitation a été envoyée au compte `Angeliive` avec le droit d’écriture, après autorisation explicite du propriétaire. L’invitation doit être acceptée par son destinataire pour rendre le dépôt accessible à ce compte.
