@@ -1,14 +1,8 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { api } from '../api'
+import { onMounted } from 'vue'
+import { library, loadLibrary, categories } from '../library'
 import Icon from '../components/Icon.vue'
-const documents = ref([])
-const error = ref('')
-const categories = computed(() => {
-  const groups = new Map()
-  for (const doc of documents.value) groups.set(doc.category, (groups.get(doc.category) || 0) + 1)
-  return [...groups].sort(([a], [b]) => a.localeCompare(b, 'fr'))
-})
-onMounted(async () => { try { documents.value = await api('/documents') } catch (failure) { error.value = failure.message } })
+onMounted(() => loadLibrary().catch(() => {}))
+const icons = { 'Sécurité': 'shield', 'Assistance': 'help', 'Prise en main': 'spark', 'Bureautique': 'file', 'Vie d’équipe': 'users' }
 </script>
-<template><section class="page-enter"><p class="eyebrow">PARCOURIR PAR THÈME</p><h1>Chaque sujet, son guide<span class="title-dot">.</span></h1><p class="lead">Explorez les catégories de votre bibliothèque interne.</p><p v-if="error" role="alert" class="notice error">{{ error }}</p><div class="category-grid"><RouterLink v-for="[name, count] in categories" :key="name" :to="{ path: '/', query: { categorie: name } }" class="panel category-card"><span class="document-icon"><Icon name="layers" :size="24" /></span><h2>{{ name }}</h2><p>{{ count }} {{ count > 1 ? 'documentations' : 'documentation' }}</p><span class="text-link">Explorer <Icon name="arrow" :size="16" /></span></RouterLink></div></section></template>
+<template><section class="categories-page"><span class="workspace-tag">EXPLORER PAR SUJET</span><h1>Chaque sujet,<br><span class="heading-soft">son point de départ.</span></h1><p class="lead">Les mêmes guides, organisés pour trouver plus vite votre réponse.</p><p v-if="library.error" role="alert" class="notice error">{{ library.error }}</p><div class="category-grid"><RouterLink v-for="[name, count] in categories" :key="name" :to="{ path: '/', query: { categorie: name } }" class="panel category-card"><div class="category-card-top"><span class="document-icon"><Icon :name="icons[name] || 'layers'" :size="25" /></span><span>{{ String(count).padStart(2, '0') }}</span></div><h2>{{ name }}</h2><p>{{ count }} guide{{ count > 1 ? 's' : '' }} pour vous accompagner.</p><span class="text-link">Explorer ce thème <Icon name="arrow" :size="16" /></span></RouterLink></div><p v-if="library.loading && !library.ready" role="status" class="loading-state">Chargement des catégories…</p></section></template>

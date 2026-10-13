@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -100,10 +101,25 @@ class PortalController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $this->checkCsrf($request);
-        $data = $content->validate($request->toArray());
-        $statement = $database->connection()->prepare('UPDATE documents SET title = :title, category = :category, summary = :summary, content = :content, blocks = :blocks, updated_at = CURRENT_TIMESTAMP WHERE id = :id');
-        $statement->execute($data + ['id' => $id]);
-        if ($statement->rowCount() === 0) { throw $this->createNotFoundException(); }
+        $payload = $request->toArray();
+        $data = $content->validate($payload);
+        $expected = null;
+        if (array_key_exists('expectedUpdatedAt', $payload)) {
+            if (!is_string($payload['expectedUpdatedAt']) || !preg_match('/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}(?::?\d{2})?)$/D', $payload['expectedUpdatedAt'])) {
+                throw new BadRequestHttpException('Version du guide invalide.');
+            }
+            try { $expected = (new \DateTimeImmutable($payload['expectedUpdatedAt']))->format('Y-m-d H:i:s.uP'); }
+            catch (\Exception) { throw new BadRequestHttpException('Version du guide invalide.'); }
+        }
+        $condition = $expected !== null ? ' AND updated_at = CAST(:expected AS timestamptz)' : '';
+        $statement = $database->connection()->prepare('UPDATE documents SET title = :title, category = :category, summary = :summary, content = :content, blocks = :blocks, updated_at = CURRENT_TIMESTAMP WHERE id = :id'.$condition);
+        $statement->execute($data + ['id' => $id] + ($expected !== null ? ['expected' => $expected] : []));
+        if ($statement->rowCount() === 0) {
+            $exists = $database->connection()->prepare('SELECT id FROM documents WHERE id = :id');
+            $exists->execute(['id' => $id]);
+            if (!$exists->fetchColumn()) { throw $this->createNotFoundException(); }
+            throw new HttpException(409, 'Ce guide a été modifié depuis son ouverture. Votre brouillon est conservé. Rouvrez le guide pour consulter la dernière version avant de reprendre vos modifications.');
+        }
         $audit->record('document_updated', $request, $this->getUser(), $id);
         return $this->json(['message' => 'La procédure a été enregistrée.']);
     }

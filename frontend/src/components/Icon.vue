@@ -1,6 +1,14 @@
 <script setup>
 defineProps({ name: { type: String, default: 'book' }, size: { type: Number, default: 20 } })
 const paths = {
+  grid: ['M3 3h7v7H3z', 'M14 3h7v7h-7z', 'M3 14h7v7H3z', 'M14 14h7v7h-7z'],
+  list: ['M8 6h13', 'M8 12h13', 'M8 18h13', 'M3 6h.01', 'M3 12h.01', 'M3 18h.01'],
+  focus: ['M8 3H3v5', 'M16 3h5v5', 'M3 16v5h5', 'M21 16v5h-5'],
+  sun: ['M12 3v2', 'M12 19v2', 'M3 12h2', 'M19 12h2', 'M5 5l2 2', 'M17 17l2 2', 'M5 19l2-2', 'M17 7l2-2', 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0'],
+  moon: ['M21 13A9 9 0 0 1 11 3a9 9 0 1 0 10 10Z'],
+  refresh: ['M20 8a9 9 0 1 0 1 6', 'M20 3v5h-5'],
+  panel: ['M3 3h18v18H3z', 'M9 3v18'],
+  spark: ['m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z'],
   bookmark: ['M5 3h14v18l-7-4-7 4z'],
   camera: ['M3 7h4l2-3h6l2 3h4v13H3z', 'M16 13a4 4 0 1 1-8 0 4 4 0 0 1 8 0'],
   menu: ['M3 6h18', 'M3 12h18', 'M3 18h18'],

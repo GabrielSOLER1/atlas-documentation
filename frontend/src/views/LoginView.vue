@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import Icon from '../components/Icon.vue'
 import Logo from '../components/Logo.vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { api, session, refreshSession } from '../api'
 
 const email = ref('')
@@ -10,6 +10,8 @@ const password = ref('')
 const error = ref('')
 const busy = ref(false)
 const router = useRouter()
+const route = useRoute()
+const showPassword = ref(false)
 
 async function login() {
   error.value = ''
@@ -20,7 +22,8 @@ async function login() {
     password.value = ''
     await refreshSession()
     if (!session.user) throw new Error('La session n’a pas pu être ouverte. Réessayez.')
-    await router.push('/')
+    const target = route.query.retour
+    await router.push(typeof target === 'string' && target.startsWith('/') && !target.startsWith('//') && !target.startsWith('/connexion') ? target : '/')
   } catch (failure) {
     error.value = failure.message
     await refreshSession()
@@ -34,7 +37,7 @@ async function login() {
     <form class="panel login-form" @submit.prevent="login">
       <p class="eyebrow">BIENVENUE SUR ATLAS</p><h2>Se connecter</h2><p class="muted">Utilisez votre compte pour consulter les procédures internes.</p>
       <label for="email">Adresse e-mail</label><input id="email" v-model="email" type="email" autocomplete="username" required maxlength="180">
-      <label for="password">Mot de passe</label><input id="password" v-model="password" type="password" autocomplete="current-password" required maxlength="4096">
+      <label for="password">Mot de passe</label><div class="password-field"><input id="password" v-model="password" :type="showPassword ? 'text' : 'password'" autocomplete="current-password" required maxlength="4096"><button type="button" class="icon-button" :aria-label="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'" :aria-pressed="showPassword" @click="showPassword = !showPassword"><Icon name="eye" :size="18" /></button></div>
       <p v-if="error" class="notice error" role="alert">{{ error }}</p><button class="button primary full-width" :disabled="busy">{{ busy ? 'Connexion…' : 'Se connecter' }} <Icon name="arrow" :size="17" /></button>
       <p class="form-note">Votre accès est attribué par le service informatique. Les connexions sont journalisées pour protéger le portail.</p>
     </form>

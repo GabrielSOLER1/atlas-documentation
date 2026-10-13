@@ -7,7 +7,7 @@ import subprocess
 from smoke import Client, BASE, USER_EMAIL, USER_PASSWORD
 
 container = os.environ.get('ATLAS_TEST_CONTAINER', 'atlas-documentation-editor-check')
-if container not in {'atlas-documentation-editor-check', 'atlas-features-check-app-1'}:
+if container not in {'atlas-documentation-editor-check', 'atlas-features-check-app-1', 'atlas-experience-check-app-1'}:
     raise RuntimeError('This test only supports the named isolated validation container.')
 client = Client()
 client.login(USER_EMAIL, USER_PASSWORD)
