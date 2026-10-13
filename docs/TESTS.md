@@ -73,3 +73,12 @@ Les tests automatiques locaux ne prouvent pas le fonctionnement du DNS, du dép�
 - Vérifier la correspondance des numéros du sommaire avec les étapes, et la copie d’un exemple.
 
 Les scripts `tests/profile.py` et `tests/roadmap.py` utilisent les mêmes variables privées de validation que les autres tests. Ne pas exécuter les tests de mutation sur la base principale.
+
+
+## Expérience de consultation et rédaction
+
+`node frontend/tests-experience.mjs` vérifie la mutualisation des requêtes, la recherche sans accents, les réponses arrivant après un changement de compte, la priorité de la dernière actualisation de session, les brouillons privés et leur expiration. Les dépendances du frontend doivent être installées.
+
+`python3 tests/editor.py URL_INSTANCE_TEST` vérifie deux éditeurs administrateur : une publication fondée sur une version périmée reçoit HTTP 409 et ne remplace pas la version récente. Les versions invalides et les publications par un utilisateur ordinaire sont refusées. Utiliser les mêmes variables privées que les autres tests, dans une base isolée.
+
+Les parcours navigateur couvrent la palette au clavier et son focus, les filtres conservés dans l’URL, les présentations en cartes/liste, les favoris, les lectures récentes, le sommaire, la taille du texte et les trois ambiances. Vérifier aussi le brouillon après rechargement, l’ajout/duplication/déplacement des blocs, la copie en aperçu sans publication, la publication avec Ctrl/⌘ S et le nettoyage à la déconnexion. Contrôler le panneau mobile, Tab/Échap et l’absence de débordement à 320 et 390 pixels.

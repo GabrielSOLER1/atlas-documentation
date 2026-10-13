@@ -458,4 +458,15 @@ footer { padding: 20px 44px; border-color: #e7e9f1; }
   .collection-controls select { width: 84px; }
   .library-toolbar { flex-wrap: wrap; }
   .reader-cover-top { flex-wrap: wrap; gap: 14px; }
+  .reader-surface .reading-section { scroll-margin-top: 240px; }
+  .focus-reading .reader-surface .reading-section { scroll-margin-top: 185px; }
 }
+
+.atlas-collection .card-open h3, .atlas-collection .card-open p, .reader-cover h1, .reader-cover .lead, .category-card h2, .command-result strong, .command-result small { overflow-wrap: anywhere; }
+.command-result > span:nth-child(2) { min-width: 0; flex: 1; }
+.atlas-collection .badge { max-width: 55%; overflow: hidden; text-overflow: ellipsis; }
+.reader-breadcrumb { flex-wrap: wrap; }
+.account-name { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.category-chips button { overflow-wrap: anywhere; max-width: 100%; }
+.resume-reading { max-width: 100%; text-align: left; line-height: 1.5; }
+.resume-reading .icon { flex-shrink: 0; }

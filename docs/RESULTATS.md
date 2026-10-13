@@ -153,3 +153,27 @@ Les captures suivantes proviennent de la validation isolée, avec un profil et u
 Le DNS et le reverse proxy internes doivent utiliser `atlas.u5` sur l’infrastructure d’Ange. Le navigateur local reste accessible par `https://localhost:8443` ; son certificat couvre aussi `atlas.u5`. Les procédures anglaises de démarrage et migration sont mises à jour dans le README.
 
 Le dernier clone du dépôt renommé a également été démarré avec une base entièrement neuve : HTTPS validé, un seul compte `admin@atlas.u5`, dix guides, profil sans photo et roadmap de douze nœuds sans coche initiale. Les installations temporaires ont été supprimées ; seuls les services Atlas Documentation restent démarrés.
+
+
+### Expérience Atlas — 13 octobre 2026
+
+La bibliothèque dispose d’une recherche sans accents, de filtres par thème avec compteurs, du tri et des présentations en cartes/liste. La palette globale fonctionne avec Ctrl/⌘ K, flèches, Entrée et Échap. Les essais ont confirmé la restitution du focus, le panneau mobile et son parcours Tab.
+
+Le lecteur propose trois ambiances, un agrandissement de texte, un sommaire actif, la progression et une concentration sans navigation. La lecture récente conserve le dernier repère lors du retour à la bibliothèque ; la reprise et la taille choisie ont été vérifiées entre les guides. Les largeurs 320 et 390 pixels ont été contrôlées sans débordement horizontal.
+
+L’éditeur a été essayé jusqu’à la publication : ajout, duplication et déplacement des blocs, récupération explicite après rechargement, aperçu, copie sans déclencher une publication, raccourci Ctrl/⌘ S et nettoyage du brouillon à la déconnexion. Deux publications concurrentes ont confirmé le refus HTTP 409 de la version périmée et la conservation du contenu récent.
+
+Les tests `smoke.py`, `users.py`, `internal.py`, `profile.py`, `roadmap.py`, `editor.py`, `session.py` et `security.py` ont réussi sur `atlas-experience-check`. Le contrôle Node a confirmé les requêtes mutualisées, la recherche normalisée, les réponses obsolètes ignorées, la séparation entre comptes et la validation/expiration des brouillons. Aucune erreur ou alerte console n’a été relevée pendant les parcours finaux.
+
+Le fichier JavaScript d’entrée passe de 163 197 à 132 254 octets ; sa compression gzip avec la même méthode locale passe de 58 350 à 50 801 octets, soit environ 13 % de moins. Cette mesure concerne ce fichier, pas l’ensemble du chargement ni une garantie de temps de réponse. L’éditeur est désormais chargé à la demande, les métadonnées sont réutilisées pendant 30 secondes et les modules différés ont aussi un cache immutable. La compression, le cache statique et le no-store des API ont été contrôlés sur le serveur.
+
+Le portail principal a été mis à jour en conservant exactement les empreintes des comptes, profils, photos, mots de passe, guides et favoris : trois comptes et dix guides. La connexion de l’administrateur actuel, le nouveau bundle, les protections HTTPS et le certificat pour `atlas.u5` en TLS 1.3 ont été vérifiés. Les changements n’ajoutent aucune ressource ou communication externe au portail.
+
+Les captures proviennent exclusivement de l’instance isolée et peuvent présenter des guides créés pendant les tests :
+
+- [Bibliothèque](preuves/atlas_experience_bibliotheque.png).
+- [Recherche globale](preuves/atlas_experience_recherche.png).
+- [Lecture confortable](preuves/atlas_experience_lecture.png).
+- [Bibliothèque mobile](preuves/atlas_experience_mobile.png).
+
+Le README n’a pas été modifié pour cette évolution ; son empreinte Git est restée identique. La copie de validation est arrêtée à la fin des contrôles, avec ses données conservées séparément pour permettre leur récupération.

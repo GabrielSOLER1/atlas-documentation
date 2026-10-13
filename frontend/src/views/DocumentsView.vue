@@ -8,7 +8,7 @@ const route = useRoute()
 const router = useRouter()
 const favorites = computed(() => route.path === '/favoris')
 const query = ref(typeof route.query.q === 'string' ? route.query.q.slice(0, 160) : '')
-const category = ref(typeof route.query.categorie === 'string' ? route.query.categorie : '')
+const category = ref(typeof route.query.categorie === 'string' ? route.query.categorie.slice(0, 60) : '')
 const sort = ref(route.query.tri === 'titre' ? 'title' : 'recent')
 const layout = ref('grid')
 const pending = ref(new Set())
@@ -39,7 +39,7 @@ watch([query, category, sort], () => {
 })
 watch(() => route.query, params => {
   if ((params.q || '') !== query.value.trim()) query.value = typeof params.q === 'string' ? params.q.slice(0, 160) : ''
-  category.value = typeof params.categorie === 'string' ? params.categorie : ''
+  category.value = typeof params.categorie === 'string' ? params.categorie.slice(0, 60) : ''
   sort.value = params.tri === 'titre' ? 'title' : 'recent'
 })
 onMounted(() => { loadLibrary().catch(() => {}); try { layout.value = localStorage.getItem('atlas-layout') === 'list' ? 'list' : 'grid' } catch {} })

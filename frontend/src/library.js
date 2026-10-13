@@ -55,9 +55,11 @@ export const categories = computed(() => {
   for (const doc of library.documents) groups.set(doc.category, (groups.get(doc.category) || 0) + 1)
   return [...groups].sort(([a], [b]) => a.localeCompare(b, 'fr'))
 })
-export const ui = reactive({ searchOpen: false, focusReading: false, navigationBusy: false, toast: null })
+export const ui = reactive({ searchOpen: false, focusReading: false, navigationBusy: false, readerSize: null, toast: null })
 let toastTimer
 export function notify(message) { clearTimeout(toastTimer); ui.toast = message; toastTimer = setTimeout(() => { ui.toast = null }, 4500) }
 watch(() => session.user?.id, () => { ui.searchOpen = false; ui.focusReading = false; ui.toast = null; clearTimeout(toastTimer) })
 
 export const searchShortcut = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘ K' : 'Ctrl K'
+
+watch(() => `${session.user?.id || ''}:${session.user?.readingSize || ''}`, () => { ui.readerSize = null })

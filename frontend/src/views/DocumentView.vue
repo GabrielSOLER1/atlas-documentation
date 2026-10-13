@@ -1,6 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from 'vue-router'
 import Icon from '../components/Icon.vue'
 import DocumentBody from '../components/DocumentBody.vue'
 import { api, formatDate, session } from '../api'
@@ -15,7 +15,7 @@ const progress = ref(0)
 const activeSection = ref('')
 const previousReading = ref(null)
 const tone = ref('paper')
-const fontSize = ref(session.user?.readingSize === 'large' ? 18 : 16)
+const fontSize = computed({ get: () => ui.readerSize ?? (session.user?.readingSize === 'large' ? 18 : 16), set: value => { ui.readerSize = value } })
 const tocOpen = ref(false)
 const sections = computed(() => documentSections(procedure.value?.content || '', procedure.value?.blocks || null))
 const minutes = computed(() => readingMinutes(procedure.value?.content || ''))
@@ -23,10 +23,10 @@ const titledSections = computed(() => sections.value.filter(section => section.t
 const related = computed(() => library.documents.filter(doc => doc.id !== procedure.value?.id && doc.category === procedure.value?.category).slice(0, 3))
 let observer
 let frame = 0
-let currentId = ''
+let tracking = true
 function calculateProgress() {
   frame = 0
-  if (!article.value || !procedure.value) return
+  if (!tracking || !article.value || !procedure.value) return
   const rect = article.value.getBoundingClientRect()
   const distance = Math.max(1, rect.height - window.innerHeight + 130)
   progress.value = Math.min(100, Math.max(0, Math.round((130 - rect.top) / distance * 100)))
@@ -36,16 +36,19 @@ function onScroll() { if (!frame) frame = requestAnimationFrame(calculateProgres
 async function open() {
   error.value = ''
   try {
-    procedure.value = await api(`/documents/${route.params.id}`)
+    const guide = await api(`/documents/${route.params.id}`)
+    if (!tracking) return
+    procedure.value = guide
     window.document.title = `${procedure.value.title} · Atlas Documentation`
     previousReading.value = library.recent.find(doc => doc.id === procedure.value.id) || null
     rememberReading(procedure.value, previousReading.value?.section || '', previousReading.value?.percent || 0)
     loadLibrary().catch(() => {})
     await nextTick()
+    if (!tracking) return
     observer?.disconnect()
     observer = new IntersectionObserver(entries => {
       const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-      if (visible.length) { currentId = visible[0].target.id; activeSection.value = currentId }
+      if (tracking && visible.length) activeSection.value = visible[0].target.id
     }, { rootMargin: '-120px 0px -55% 0px', threshold: 0 })
     article.value?.querySelectorAll('.reading-section').forEach(section => observer.observe(section))
     calculateProgress()
@@ -55,7 +58,10 @@ onMounted(() => {
   try { const saved = localStorage.getItem('atlas-reading-tone'); if (['paper', 'soft', 'night'].includes(saved)) tone.value = saved } catch {}
   open(); window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll)
 })
-onBeforeUnmount(() => { observer?.disconnect(); cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); ui.focusReading = false })
+function stopTracking() { tracking = false; observer?.disconnect(); cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll) }
+onBeforeRouteLeave(stopTracking)
+onBeforeRouteUpdate((to, from) => { if (to.path !== from.path) stopTracking() })
+onBeforeUnmount(() => { stopTracking(); ui.focusReading = false })
 function goToSection(id) {
   tocOpen.value = false; activeSection.value = id
   const element = window.document.getElementById(id)
