@@ -1,0 +1,4 @@
+<?php
+$context = stream_context_create(['ssl' => ['cafile' => '/etc/atlas/ca.crt'], 'http' => ['timeout' => 3]]);
+$response = @file_get_contents('https://localhost/api/health', false, $context);
+exit($response === '{"status":"ok"}' ? 0 : 1);

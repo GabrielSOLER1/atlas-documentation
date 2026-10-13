@@ -1,0 +1,41 @@
+import { createApp } from 'vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import App from './App.vue'
+import LoginView from './views/LoginView.vue'
+import DocumentsView from './views/DocumentsView.vue'
+import DocumentView from './views/DocumentView.vue'
+import DocumentEditorView from './views/DocumentEditorView.vue'
+import NotFoundView from './views/NotFoundView.vue'
+import UsersView from './views/UsersView.vue'
+import CategoriesView from './views/CategoriesView.vue'
+import InformationView from './views/InformationView.vue'
+import ActivityView from './views/ActivityView.vue'
+import { session, refreshSession } from './api'
+import './style.css'
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  scrollBehavior: (_to, _from, saved) => saved || { top: 0 },
+  routes: [
+    { path: '/connexion', component: LoginView, meta: { public: true } },
+    { path: '/', component: DocumentsView },
+    { path: '/categories', component: CategoriesView },
+    { path: '/aide', component: InformationView, meta: { public: true } },
+    { path: '/confidentialite', component: InformationView, meta: { public: true } },
+    { path: '/comptes', component: UsersView, meta: { admin: true } },
+    { path: '/activite', component: ActivityView, meta: { admin: true } },
+    { path: '/procedures/nouveau', component: DocumentEditorView, meta: { admin: true } },
+    { path: '/procedures/:id', name: 'document', component: DocumentView },
+    { path: '/procedures/:id/modifier', name: 'edit', component: DocumentEditorView, meta: { admin: true } },
+    { path: '/acces-refuse', component: NotFoundView, props: { forbidden: true } },
+    { path: '/:pathMatch(.*)*', component: NotFoundView, meta: { public: true } },
+  ],
+})
+router.beforeEach(async to => {
+  if (!session.ready) await refreshSession()
+  if (session.error) return true
+  if (!to.meta.public && !session.user) return '/connexion'
+  if (to.meta.admin && !session.user?.admin) return '/acces-refuse'
+  if (to.path === '/connexion' && session.user) return '/'
+})
+createApp(App).use(router).mount('#app')

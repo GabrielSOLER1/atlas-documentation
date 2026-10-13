@@ -1,0 +1,26 @@
+security:
+    password_hashers:
+        App\Security\User: auto
+    providers:
+        atlas_users:
+            id: App\Security\UserProvider
+    firewalls:
+        main:
+            lazy: true
+            provider: atlas_users
+            entry_point: App\Security\AuthenticationHandler
+            form_login:
+                check_path: api_login
+                username_parameter: email
+                password_parameter: password
+                enable_csrf: true
+                csrf_token_id: authenticate
+                success_handler: App\Security\AuthenticationHandler
+                failure_handler: App\Security\AuthenticationHandler
+    access_control:
+        - { path: '^/api/(session|login|health)$', roles: PUBLIC_ACCESS }
+        - { path: '^/api/users', roles: ROLE_ADMIN }
+        - { path: '^/api/activity', roles: ROLE_ADMIN }
+        - { path: '^/api/documents$', methods: [POST], roles: ROLE_ADMIN }
+        - { path: '^/api/documents/\d+$', methods: [PUT], roles: ROLE_ADMIN }
+        - { path: '^/api', roles: ROLE_USER }

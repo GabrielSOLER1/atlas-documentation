@@ -1,0 +1,17 @@
+/.env
+/.env.*
+!/.env.example
+backend/.env.local
+backend/.env.local.*
+backend/vendor/
+backend/var/
+backend/public/build/
+frontend/node_modules/
+backups/*
+!backups/.gitkeep
+.DS_Store
+__pycache__/
+
+certs/
+*.tar
+*.tar.gz

@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    App\:
+        resource: '../src/'
+        exclude: '../src/{Kernel.php,Security/User.php}'
+    App\Service\Database:
+        arguments:
+            $host: '%env(DB_HOST)%'
+            $port: '%env(int:DB_PORT)%'
+            $name: '%env(DB_NAME)%'
+            $user: '%env(DB_USER)%'
+            $password: '%env(DB_PASSWORD)%'
+    App\EventSubscriber\SecuritySubscriber:
+        arguments:
+            $enforceHttps: '%env(bool:APP_ENFORCE_HTTPS)%'
+            $publicUrl: '%env(APP_PUBLIC_URL)%'
