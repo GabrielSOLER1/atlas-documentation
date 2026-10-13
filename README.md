@@ -31,7 +31,7 @@ This creates missing local secrets and TLS certificates, builds the application,
 
 Import **`certs/ca.crt`** into the trusted certificate-authority store of each client device/browser. This enables certificate validation without a browser warning. Do not disable certificate checks.
 
-Only distribute `ca.crt`. Keep `ca.key`, `server.key` and `.env` private. The certificate covers `localhost`, `127.0.0.1` and `atlas.local`.
+Only distribute `ca.crt`. Keep `ca.key`, `server.key` and `.env` private. The certificate covers `localhost`, `127.0.0.1` and `atlas.u5`.
 
 ### 4. Open and sign in
 
@@ -68,8 +68,8 @@ The repository includes `backend/.env`, which contains development defaults only
 Before publishing an existing installation, replace any previously shared demonstration passwords using the server command below. Removing credentials from source does not change database passwords or remove them from any already-published Git history.
 
 ```sh
-docker compose exec --user www-data app php bin/console app:reset-password gabriel@atlas.local
-docker compose exec --user www-data app php bin/console app:reset-password utilisateur@atlas.local
+docker compose exec --user www-data app php bin/console app:reset-password admin@atlas.u5
+docker compose exec --user www-data app php bin/console app:reset-password utilisateur@atlas.u5
 ```
 
 These example addresses belong to the original installation; substitute the actual account email if needed. Enter and confirm a new password when prompted; input is hidden and the password is not a command-line argument. Existing sessions become invalid after the password change. This command runs only on the server and does not create a public password-reset endpoint.
@@ -82,7 +82,7 @@ Relevant `.env` settings:
 
 | Setting | Default / purpose |
 | --- | --- |
-| `APP_PUBLIC_URL` | `https://localhost:8443`; use `https://atlas.local` behind the internal reverse proxy |
+| `APP_PUBLIC_URL` | `https://localhost:8443`; use `https://atlas.u5` behind the internal reverse proxy |
 | `APP_PORT` | `8080`, HTTP redirect only |
 | `APP_HTTPS_PORT` | `8443`, application HTTPS port |
 | `APP_ENFORCE_HTTPS` | `1`; keep enabled on the deployed portal |
@@ -91,7 +91,7 @@ Relevant `.env` settings:
 
 Both published ports bind to **127.0.0.1**. PostgreSQL has no published port and uses an isolated internal network. The application ingress network disables IP masquerading, and no external DNS resolver is configured for the application.
 
-For VM3 access, Ange must configure internal DNS and a reverse proxy on **VM1's private LAN address**. Forward all paths to `https://localhost:8443`, including `/api` and `/build`, and validate the upstream certificate against `certs/ca.crt`. Use a trusted internal certificate for the proxy's `atlas.local` endpoint as well. Do not publish the service on an Internet-facing interface.
+For VM3 access, Ange must configure internal DNS and a reverse proxy on **VM1's private LAN address**. Forward all paths to `https://localhost:8443`, including `/api` and `/build`, and validate the upstream certificate against `certs/ca.crt`. Use a trusted internal certificate for the proxy's `atlas.u5` endpoint as well. Do not publish the service on an Internet-facing interface.
 
 See [the architecture report](docs/RAPPORT_ARCHITECTURE.md) and [internal integration notes](docs/INTERNAL_DEPLOYMENT.md).
 

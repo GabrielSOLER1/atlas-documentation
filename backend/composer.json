@@ -1,6 +1,6 @@
 {
   "name": "atlas/portail-documentaire",
-  "description": "Partie SLAM du projet Atlas — Gabriel Soler",
+  "description": "Atlas Documentation — internal knowledge portal",
   "type": "project",
   "require": {
     "php": ">=8.2",

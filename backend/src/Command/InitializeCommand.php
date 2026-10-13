@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Security\User;
 use App\Service\Database;
+use App\Service\Migrations;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AsCommand(name: 'app:init', description: 'Initializes the schema and first administrator without overwriting existing data.')]
 class InitializeCommand extends Command
 {
-    public function __construct(private Database $database, private UserPasswordHasherInterface $hasher)
+    public function __construct(private Database $database, private UserPasswordHasherInterface $hasher, private Migrations $migrations)
     {
         parent::__construct();
     }
@@ -24,9 +25,10 @@ class InitializeCommand extends Command
         $db->beginTransaction();
         try {
             $db->exec(file_get_contents(dirname(__DIR__, 2).'/database/schema.sql'));
+            $this->migrations->apply($db);
             if ((int) $db->query('SELECT COUNT(*) FROM users')->fetchColumn() === 0) {
-                $email = getenv('BOOTSTRAP_ADMIN_EMAIL') ?: 'gabriel@atlas.local';
-                $name = getenv('BOOTSTRAP_ADMIN_NAME') ?: 'Gabriel Soler';
+                $email = getenv('BOOTSTRAP_ADMIN_EMAIL') ?: 'admin@atlas.u5';
+                $name = getenv('BOOTSTRAP_ADMIN_NAME') ?: 'admin';
                 $password = getenv('BOOTSTRAP_ADMIN_PASSWORD');
                 if (!$password || strlen($password) < 12 || strlen($password) > 72 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     throw new \RuntimeException('Configure the initial administrator in .env before starting Atlas.');

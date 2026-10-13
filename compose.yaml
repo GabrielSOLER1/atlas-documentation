@@ -19,8 +19,8 @@ services:
       APP_ENV: prod
       APP_ENFORCE_HTTPS: ${APP_ENFORCE_HTTPS:-1}
       APP_PUBLIC_URL: ${APP_PUBLIC_URL:-https://localhost:8443}
-      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-gabriel@atlas.local}
-      BOOTSTRAP_ADMIN_NAME: ${BOOTSTRAP_ADMIN_NAME:-Gabriel Soler}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-admin@atlas.u5}
+      BOOTSTRAP_ADMIN_NAME: ${BOOTSTRAP_ADMIN_NAME:-admin}
       BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
       APP_DEBUG: 0
       APP_SECRET: ${APP_SECRET:?Copiez .env.example vers .env et renseignez APP_SECRET}

@@ -11,7 +11,7 @@ Le service fonctionne sans API externe, messagerie sortante, publicité, outil d
 ```mermaid
 flowchart LR
     C[VM3 — navigateur] -->|Résolution interne| DNS[VM2 — DNS]
-    C -->|HTTPS atlas.local| P[VM1 — reverse proxy interne]
+    C -->|HTTPS atlas.u5| P[VM1 — reverse proxy interne]
     P -->|HTTPS local 8443| W[Conteneur application
 Apache + PHP + Symfony]
     W -->|SQL réseau Docker privé| D[(Conteneur PostgreSQL)]
@@ -79,7 +79,7 @@ Ces protections et les tests décrits ci-dessous couvrent les parcours actuels. 
 
 ## 6. HTTPS et frontières réseau
 
-Le script de démarrage génère une autorité locale et un certificat pour `atlas.local`, `localhost` et `127.0.0.1`. Il ne contacte aucune autorité publique. Les navigateurs clients doivent faire confiance à `certs/ca.crt`. Cette confiance n’a pas été installée automatiquement dans le système du poste.
+Le script de démarrage génère une autorité locale et un certificat pour `atlas.u5`, `localhost` et `127.0.0.1`. Il ne contacte aucune autorité publique. Les navigateurs clients doivent faire confiance à `certs/ca.crt`. Cette confiance n’a pas été installée automatiquement dans le système du poste.
 
 Le port HTTP redirige vers HTTPS, y compris pour les ressources statiques. HSTS est envoyé sur les réponses HTTPS. La clé privée de l’autorité reste sur le serveur ; seuls le certificat et la clé serveur nécessaires sont montés pour Apache, ainsi que le certificat public de l’autorité pour le contrôle de disponibilité.
 

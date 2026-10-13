@@ -38,7 +38,7 @@ La recherche et l’enregistrement ont aussi été vérifiés dans le navigateur
 
 ## À valider avec Ange
 
-Résolution de `atlas.local`, accès depuis VM3 par le reverse proxy de VM1, sauvegarde Restic sur VM2 et récupération de l’export depuis un instantané Restic. La restauration PostgreSQL testée ici ne constitue pas une validation du dépôt Restic d’Ange.
+Résolution de `atlas.u5`, accès depuis VM3 par le reverse proxy de VM1, sauvegarde Restic sur VM2 et récupération de l’export depuis un instantané Restic. La restauration PostgreSQL testée ici ne constitue pas une validation du dépôt Restic d’Ange.
 
 
 ## Mise à jour : interface, guides et comptes

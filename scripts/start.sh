@@ -8,7 +8,7 @@ if [ ! -f .env ]; then
     printf 'APP_PORT=8080\nAPP_HTTPS_PORT=8443\nAPP_PUBLIC_URL=https://localhost:8443\nAPP_ENFORCE_HTTPS=1\nAPP_SECRET=%s\nDB_PASSWORD=%s\n' "$(openssl rand -hex 32)" "$(openssl rand -hex 24)" > .env
 fi
 if ! grep -q '^BOOTSTRAP_ADMIN_PASSWORD=' .env; then
-    printf '\nBOOTSTRAP_ADMIN_EMAIL=gabriel@atlas.local\nBOOTSTRAP_ADMIN_NAME=Gabriel Soler\nBOOTSTRAP_ADMIN_PASSWORD=%s\n' "$(openssl rand -hex 20)" >> .env
+    printf '\nBOOTSTRAP_ADMIN_EMAIL=admin@atlas.u5\nBOOTSTRAP_ADMIN_NAME=admin\nBOOTSTRAP_ADMIN_PASSWORD=%s\n' "$(openssl rand -hex 20)" >> .env
 fi
 if grep -q 'replace-with-' .env; then
     printf 'Replace the example secrets in .env before starting Atlas.\n' >&2

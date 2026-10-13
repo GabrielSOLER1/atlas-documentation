@@ -16,7 +16,7 @@ Ne marquer un essai comme réussi qu’après exécution. Les tests DNS et l’a
 | Diagnostic | Après une mauvaise connexion, consulter les journaux | Trace « Connexion refusée » identifiable | Extrait de journal |
 | Restauration | Exporter, récupérer le fichier sauvegardé avec Ange, puis utiliser `restore-test.sh` | Vérification des données réussie | Sortie de restauration |
 | Application restaurée | Lancer la commande affichée par le script ; ouvrir le port 8081 et se connecter | Comptes et contenus récupérés utilisables | Capture du portail restauré |
-| Intégration avec Ange | Depuis VM3, consulter `http://atlas.local` | Connexion et consultation fonctionnent par DNS et reverse proxy | Capture depuis VM3 |
+| Intégration avec Ange | Depuis VM3, consulter `https://atlas.u5` | Connexion et consultation fonctionnent par DNS et reverse proxy | Capture depuis VM3 |
 
 ## Gestion des comptes et lecture des guides
 

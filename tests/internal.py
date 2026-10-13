@@ -34,14 +34,14 @@ member.request('/activity', 403)
 activity = admin.request('/activity')
 assert activity['summary']['connections'] >= 2
 assert any(event['type'] == 'document_created' and event['target_id'] == created['id'] for event in activity['events'])
-assert any(event['type'] == 'login_success' and event['actor_email'] == 'gabriel@atlas.local' for event in activity['events'])
+assert any(event['type'] == 'login_success' and event['actor_email'] == ADMIN_EMAIL for event in activity['events'])
 assert all('password' not in event and 'attempt_key' not in event for event in activity['events'])
 filtered = admin.request('/activity?type=document_created&days=30')
 assert all(event['type'] == 'document_created' for event in filtered['events'])
 admin.request('/activity?type=invalid', 400)
 
 throttled = Client()
-email = f'blocked-{time.time_ns()}@atlas.local'
+email = f'blocked-{time.time_ns()}@atlas.u5'
 for _ in range(5):
     throttled.login(email, 'IncorrectPassword!', 401)
 throttled.login(email, 'IncorrectPassword!', 429)

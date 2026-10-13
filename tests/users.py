@@ -15,7 +15,7 @@ admin.request(f'/users/{own_id}', 409, 'PATCH', {'active': False})
 admin.request(f'/users/{own_id}', 409, 'PATCH', {'role': 'ROLE_USER'})
 data = {
     'name': 'Compte de validation',
-    'email': f'validation-{time.time_ns()}@atlas.local',
+    'email': f'validation-{time.time_ns()}@atlas.u5',
     'password': 'ValidationAtlas2026!',
     'role': 'ROLE_USER',
 }
@@ -31,7 +31,7 @@ admin.request('/users', 409, 'POST', {**data, 'email': data['email'].upper()})
 member = Client()
 member.login(data['email'], data['password'])
 member.request('/users', 403)
-member.request('/users', 403, 'POST', {**data, 'email': 'other@atlas.local'})
+member.request('/users', 403, 'POST', {**data, 'email': 'other@atlas.u5'})
 member.request(f"/users/{user['id']}", 403, 'PATCH', {'role': 'ROLE_ADMIN'})
 admin.request(f"/users/{user['id']}", 403, 'PATCH', {'active': False}, csrf=False)
 admin.request(f"/users/{user['id']}", 422, 'PATCH', {'active': 'false'})

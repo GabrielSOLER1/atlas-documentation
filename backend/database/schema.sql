@@ -39,3 +39,8 @@ CREATE TABLE IF NOT EXISTS audit_events (
 );
 CREATE INDEX IF NOT EXISTS audit_events_date_idx ON audit_events(created_at);
 CREATE INDEX IF NOT EXISTS audit_events_attempt_idx ON audit_events(attempt_key, created_at);
+
+CREATE TABLE IF NOT EXISTS app_migrations (
+    version VARCHAR(100) PRIMARY KEY,
+    applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
