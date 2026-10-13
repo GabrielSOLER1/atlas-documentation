@@ -59,6 +59,26 @@ As an administrator:
 
 Users can read, search and browse guides by category. Help and privacy pages explain access and personal-data processing. The interface is in French.
 
+## Personal workspace and administrator roadmap
+
+Click the account name in the header to open **Mon profil**. Each member can edit their display name, optional function, department and short introduction, choose an initials colour and increase guide text size. Pending changes prompt before leaving the page.
+
+Profile photos accept JPEG, PNG or WebP up to 256 KB. The server checks image dimensions, crops a 256 × 256 square, re-encodes it as WebP and strips source metadata. Photos stay in PostgreSQL and are served only to their signed-in owner. You can remove your photo from the profile page.
+
+Use the bookmark button to keep guides in **Mes favoris**. Favorites are private to each account. The library supports recent-update and alphabetical sorting; code examples have a copy button and guides have a print layout.
+
+The **Roadmap administrateur** is one interactive guide with twelve connected steps. Click a node to read its checklist and open the corresponding internal action. Progress is personal and stored with the administrator account. Both the page and API require an administrator role. Its content is maintained in `backend/database/roadmap.json`.
+
+The initial library includes ten guides about internal access, assistance, workstations, shared files, session security, printing, meeting rooms, suspicious messages, file recovery and handover. Startup adds missing built-in guides without overwriting existing documents.
+
+## Upgrading an existing installation
+
+Back up the database before updating. On startup, schema changes and recorded data migrations run transactionally. The domain migration replaces the previous internal domain with `atlas.u5`, converts the original Gabriel administrator to **`admin@atlas.u5`**, and sets its display name to **admin**. Existing passwords and unrelated account addresses are preserved. Previous sessions may require a new login.
+
+Update your local `.env` and any private credential file to use the new account addresses. These files are intentionally outside Git. Ange must point internal DNS and the HTTPS proxy to **atlas.u5**. The certificate script automatically reissues an old-domain server certificate using the existing internal CA; clients that already trust that CA do not need a different authority.
+
+The default Compose project is now `atlas-documentation`. Existing users of a differently named Compose project must deliberately migrate their database export into the new project, or continue temporarily with their previous `COMPOSE_PROJECT_NAME`. Changing the Compose name alone creates a different database volume. Do not remove the old volume before checking the restored data. See the recovery guide.
+
 ## Publish the source on GitHub
 
 Create a private repository and grant Ange access. Publish the contents of this project folder, with `compose.yaml` at the repository root. Keep the existing `.gitignore`.
@@ -149,6 +169,8 @@ Run HTTP tests on a restored validation instance, using its HTTPS URL and the in
 ATLAS_CA_FILE=certs/ca.crt python3 tests/smoke.py https://localhost:8444
 ATLAS_CA_FILE=certs/ca.crt python3 tests/users.py https://localhost:8444
 ATLAS_CA_FILE=certs/ca.crt python3 tests/internal.py https://localhost:8444
+ATLAS_CA_FILE=certs/ca.crt python3 tests/profile.py https://localhost:8444
+ATLAS_CA_FILE=certs/ca.crt python3 tests/roadmap.py https://localhost:8444
 ```
 
 Set `ATLAS_ADMIN_EMAIL`, `ATLAS_ADMIN_PASSWORD`, `ATLAS_USER_EMAIL` and `ATLAS_USER_PASSWORD` in your local test environment before authenticated tests. There are no built-in account passwords. Create the ordinary user through an administrator before taking the validation export. Do not commit test credentials. `security.py` needs only `ATLAS_CA_FILE`, as it checks anonymous access.

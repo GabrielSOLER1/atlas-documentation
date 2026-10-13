@@ -22,3 +22,9 @@ export function parseSections(content) {
 export function readingMinutes(content) {
   return Math.max(1, Math.ceil(content.trim().split(/\s+/u).filter(Boolean).length / 180))
 }
+
+export function documentSections(content, blocks) {
+  let number = 0
+  const source = blocks || parseSections(content).map(section => ({ type: section.title ? 'section' : 'text', title: section.title, text: section.paragraphs.join('\n\n'), legacyNumber: section.number }))
+  return source.map((block, index) => ({ ...block, id: `section-${index + 1}`, number: block.type === 'section' ? block.legacyNumber || String(++number).padStart(2, '0') : null }))
+}

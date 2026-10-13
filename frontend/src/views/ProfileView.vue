@@ -1,6 +1,7 @@
 <script setup>
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { api, session } from '../api'
+import { onBeforeRouteLeave } from 'vue-router'
 import Avatar from '../components/Avatar.vue'
 import Icon from '../components/Icon.vue'
 
@@ -12,13 +13,18 @@ const error = ref('')
 const notice = ref('')
 const preview = ref('')
 const image = ref('')
+const baseline = ref('')
+const dirty = computed(() => baseline.value && (JSON.stringify(form) !== baseline.value || image.value))
+function warnOnClose(event) { if (dirty.value) { event.preventDefault(); event.returnValue = '' } }
+onBeforeRouteLeave(() => !dirty.value || window.confirm('Votre profil contient des modifications non enregistrées. Quitter cette page ?'))
 onMounted(async () => {
-  try { const user = await api('/profile'); session.user = user; for (const key of Object.keys(form)) form[key] = user[key] }
+  window.addEventListener('beforeunload', warnOnClose)
+  try { const user = await api('/profile'); session.user = user; for (const key of Object.keys(form)) form[key] = user[key]; baseline.value = JSON.stringify(form) }
   catch (failure) { error.value = failure.message }
   finally { loading.value = false }
 })
 function clearPreview() { if (preview.value) URL.revokeObjectURL(preview.value); preview.value = ''; image.value = '' }
-onBeforeUnmount(clearPreview)
+onBeforeUnmount(() => { clearPreview(); window.removeEventListener('beforeunload', warnOnClose) })
 async function choosePhoto(event) {
   error.value = ''; notice.value = ''; clearPreview()
   const file = event.target.files[0]
@@ -43,7 +49,7 @@ async function updatePhoto(remove = false) {
 }
 async function save() {
   busy.value = true; error.value = ''; notice.value = ''
-  try { session.user = await api('/profile', { method: 'PUT', body: JSON.stringify(form) }); notice.value = 'Votre profil et vos préférences ont été enregistrés.' }
+  try { session.user = await api('/profile', { method: 'PUT', body: JSON.stringify(form) }); for (const key of Object.keys(form)) form[key] = session.user[key]; baseline.value = JSON.stringify(form); notice.value = 'Votre profil et vos préférences ont été enregistrés.' }
   catch (failure) { error.value = failure.message }
   finally { busy.value = false }
 }

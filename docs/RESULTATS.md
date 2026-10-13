@@ -127,3 +127,27 @@ Les sources ont été publiées sur le dépôt privé [GabrielSOLER1/atlas-docum
 Un vrai clone du dépôt a démarré dans le projet isolé `atlas-git-clone-check`. Les services étaient sains ; le certificat HTTPS, les redirections, les cookies, les protections des accès anonymes et la 404 ont été vérifiés. La connexion avec l’administrateur généré sur cette installation a réussi ; la base contenait un administrateur et les deux guides initiaux. Les conteneurs et données de vérification ont été supprimés après les contrôles.
 
 Une invitation a été envoyée au compte `Angeliive` avec le droit d’écriture, après autorisation explicite du propriétaire. L’invitation doit être acceptée par son destinataire pour rendre le dépôt accessible à ce compte.
+
+### Atlas Documentation — profils, domaine et roadmap
+
+Le dépôt et le dossier ont été renommés `atlas-documentation`. L’historique Git est conservé. Les premiers jalons sont `Use atlas.u5` et `Add profiles and roadmap`, suivis des finitions et résultats de validation.
+
+Les contrôles sur `atlas-features-check` couvrent : profils individuels, refus de modifier rôle/adresse/statut par cette API, CSRF, photos invalides et trop volumineuses refusées, recadrage WebP, suppression, favoris sans doublon et invisibles aux autres comptes, accès administrateur à la roadmap, validation des identifiants d’étape et conservation des coches après reconnexion. Les tests de connexion, comptes, publication, journal, limitation des tentatives et expiration des sessions restent réussis.
+
+Une copie des données existantes a été migrée deux fois sans réinitialiser les hachages ni perdre un compte. Le contrôle a pris en compte les trois comptes effectivement présents, dont un compte supplémentaire créé par le propriétaire. Les adresses étrangères au précédent domaine interne sont conservées.
+
+Le portail principal a été basculé après un dernier export, application arrêtée pour éviter des écritures entre sauvegarde et restauration. La nouvelle installation conserve trois comptes, dix guides et les mots de passe actuels. Le compte d’origine est `admin@atlas.u5`, nom `admin`. Les accès privés locaux ont été synchronisés. L’ancienne sauvegarde et le volume historique sont gardés pour la récupération.
+
+Le HTTPS principal a été vérifié avec la CA interne, ainsi qu’en connexion TLS 1.3 avec le nom serveur `atlas.u5`. HTTP redirige vers HTTPS, les cookies restent Secure et les endpoints privés restent protégés. La compression gzip et le cache immutable du bundle statique ont été mesurés ; les réponses API restent no-store. Les pages Vue sont chargées à la demande. Un export puis une restauration isolée ont également conservé exactement les photos privées, champs de profil, préférences, favoris et coches de progression.
+
+La vérification navigateur sur une copie a confirmé : nom du compte cliquable, informations de profil enregistrées, photo locale prévisualisée puis sauvegardée, favoris retrouvés, étape de roadmap cliquée et progression conservée après rechargement, alerte de sortie d’un profil modifié, copie d’un exemple, numérotation du sommaire corrigée, titres d’onglet adaptés et absence d’erreur console. Profil et roadmap ont été contrôlés à 390 px sans débordement horizontal ; le menu se replie après navigation.
+
+Les captures suivantes proviennent de la validation isolée, avec un profil et une photo de test :
+
+- [Profil personnalisé](preuves/atlas_profil.png).
+- [Profil mobile](preuves/atlas_profil_mobile.png).
+- [Roadmap interactive](preuves/atlas_roadmap.png).
+- [Roadmap mobile](preuves/atlas_roadmap_mobile.png).
+- [Nouveau guide et sommaire](preuves/atlas_nouveau_guide.png).
+
+Le DNS et le reverse proxy internes doivent utiliser `atlas.u5` sur l’infrastructure d’Ange. Le navigateur local reste accessible par `https://localhost:8443` ; son certificat couvre aussi `atlas.u5`. Les procédures anglaises de démarrage et migration sont mises à jour dans le README.

@@ -2,16 +2,16 @@ import { createApp } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import App from './App.vue'
 import LoginView from './views/LoginView.vue'
-import DocumentsView from './views/DocumentsView.vue'
-import DocumentView from './views/DocumentView.vue'
+const DocumentsView = () => import('./views/DocumentsView.vue')
+const DocumentView = () => import('./views/DocumentView.vue')
 import DocumentEditorView from './views/DocumentEditorView.vue'
 import NotFoundView from './views/NotFoundView.vue'
-import UsersView from './views/UsersView.vue'
-import CategoriesView from './views/CategoriesView.vue'
-import InformationView from './views/InformationView.vue'
-import ActivityView from './views/ActivityView.vue'
-import ProfileView from './views/ProfileView.vue'
-import RoadmapView from './views/RoadmapView.vue'
+const UsersView = () => import('./views/UsersView.vue')
+const CategoriesView = () => import('./views/CategoriesView.vue')
+const InformationView = () => import('./views/InformationView.vue')
+const ActivityView = () => import('./views/ActivityView.vue')
+const ProfileView = () => import('./views/ProfileView.vue')
+const RoadmapView = () => import('./views/RoadmapView.vue')
 import { session, refreshSession } from './api'
 import './style.css'
 

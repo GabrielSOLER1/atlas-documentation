@@ -1,4 +1,4 @@
-# Atlas — Rapport de fonctionnement et d’architecture
+# Atlas Documentation — Rapport de fonctionnement et d’architecture
 
 ## 1. Objectif et périmètre
 
@@ -116,3 +116,19 @@ Les tests DNS, accès depuis VM3 et récupération Restic nécessitent le raccor
 Le dépôt contient les sources, les fichiers de verrouillage des dépendances et `backend/.env` avec des valeurs de développement. Le `.env` privé à la racine, les clés, certificats, exports SQL et archives d’images restent exclus. Docker injecte les secrets propres à chaque installation. Une copie limitée aux sources publiables a été démarrée et vérifiée avec une base vide.
 
 Les tests utilisent des identifiants fournis par l’environnement, sans mot de passe de compte intégré au code. La commande locale `app:reset-password` permet à l’opérateur du serveur de renouveler un mot de passe existant avec une saisie masquée et confirmation. Elle hache la nouvelle valeur et invalide les anciennes sessions à la prochaine requête. Aucun service externe ni route publique de réinitialisation n’est ajouté. Les anciens accès doivent être renouvelés avant publication des sources ; Git ne transfère pas la base de données ni les comptes d’une installation.
+
+## 11. Évolution du domaine et espace personnel
+
+Le projet, le dossier et le dépôt s’appellent désormais **Atlas Documentation** (`atlas-documentation`). Le domaine attendu par le DNS et le reverse proxy est **atlas.u5**. La migration des anciens comptes remplace leur ancien domaine interne et transforme le compte administrateur d’origine en `admin@atlas.u5`, nom affiché `admin`, en conservant son identifiant et son mot de passe. Les autres adresses sont conservées. Une table `app_migrations` empêche de rejouer les transformations déjà appliquées.
+
+Le profil se trouve sur `/profil`, accessible en cliquant le compte dans l’en-tête. Chaque utilisateur peut modifier uniquement ses propres champs de présentation et préférences ; adresse de connexion, rôle et statut ne sont pas modifiables par cette API. Les informations facultatives, photos, favoris et progression ne sont exposés que dans l’espace du propriétaire. Le texte des guides peut être agrandi et la couleur des initiales personnalisée.
+
+Les photos sont vérifiées puis normalisées par PHP GD : JPEG, PNG ou WebP, 256 Ko maximum, dimensions limitées à 4096 pixels par côté et huit millions de pixels. Le serveur recadre en carré de 256 pixels, réencode en WebP sans métadonnées et stocke les octets dans PostgreSQL. Il n’existe aucun répertoire public d’images téléversées. L’accès à la photo exige la session du propriétaire ; la suppression et le changement exigent un jeton CSRF. La politique CSP autorise les aperçus temporaires locaux `blob:` uniquement pour les images.
+
+La table `document_favorites` lie un compte à un guide. Sa clé composée empêche les doublons ; chaque requête utilise l’identité de la session et les favoris des autres comptes ne sont pas renvoyés. Le profil, la photo, les préférences et les favoris sont inclus dans l’export SQL protégé.
+
+La roadmap est une seule documentation réservée aux administrateurs. Ses douze étapes sont servies depuis `backend/database/roadmap.json`. Un graphe SVG relie le chemin principal aux points de contrôle ; un clic ouvre les instructions et une action interne. Les coches personnelles sont conservées dans `users.roadmap_progress`, après validation de chaque identifiant. Elles sont un repère de lecture et ne prouvent pas l’exécution d’une opération. L’API et la navigation refusent ce parcours aux utilisateurs ordinaires.
+
+Huit guides structurés supplémentaires complètent les deux guides initiaux. L’initialisation valide les blocs et ajoute uniquement les slugs absents : les documents déjà publiés ne sont pas remplacés. La lecture partage désormais le même calcul de sections avec le sommaire et l’aperçu, pour éviter une numérotation décalée par les notes ou les commandes.
+
+Le chargement Vue différé évite de charger toutes les pages dès la connexion. Apache compresse les ressources CSS, JavaScript et SVG, et les fichiers portant une empreinte de construction sont mis en cache. Les réponses de profil, session, journal et API restent en `no-store`. Le menu mobile est repliable ; la copie des exemples et une mise en page d’impression facilitent la consultation.

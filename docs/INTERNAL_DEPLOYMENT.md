@@ -11,3 +11,9 @@
 Keep host routing, firewall and proxy bindings internal. There is no Internet-facing deployment or public certificate service in this project. The application's HTTP port performs redirects and is not the recommended proxy upstream.
 
 The certificate script covers `atlas.u5`, `localhost` and `127.0.0.1`. For another internal hostname, issue a certificate containing that hostname before changing the service URL. Server certificates are valid for one year; renew them with the internal CA before expiry.
+
+## Domain upgrade
+
+Configure internal DNS and the proxy virtual host for **atlas.u5**. The certificate script renews a certificate that does not cover this hostname, while keeping the existing CA. Default bootstrap credentials use `admin@atlas.u5`, display name `admin`. Existing passwords survive the database migration; update private local credential files to the new identifier.
+
+The default Compose project is `atlas-documentation`. Preserve data when moving from an older project name: take an SQL export, start the new database service, restore into it while the application is stopped, then start the application so transactional migrations and missing guide seeds apply. Verify account and document counts before retiring the previous services.

@@ -1,13 +1,9 @@
 <script setup>
 import { computed, ref } from 'vue'
 import Icon from './Icon.vue'
-import { parseSections } from '../document'
+import { documentSections } from '../document'
 const props = defineProps({ content: { type: String, default: '' }, blocks: { type: Array, default: null }, activeSection: { type: String, default: '' } })
-const sections = computed(() => {
-  let number = 0
-  const source = props.blocks || parseSections(props.content).map(section => ({ type: section.title ? 'section' : 'text', title: section.title, text: section.paragraphs.join('\n\n') }))
-  return source.map((block, index) => ({ ...block, id: `section-${index + 1}`, number: block.type === 'section' ? String(++number).padStart(2, '0') : null }))
-})
+const sections = computed(() => documentSections(props.content, props.blocks))
 const copied = ref('')
 const copyError = ref('')
 async function copyCode(block) {

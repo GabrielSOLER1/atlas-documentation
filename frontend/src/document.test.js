@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { parseSections, readingMinutes } from './document.js'
+import { parseSections, readingMinutes, documentSections } from './document.js'
 
 test('numbered procedures retain all paragraphs and their original numbering', () => {
   const sections = parseSections('Introduction.\r\n\r\n1. Vérifier\r\nPremier paragraphe.\r\n\r\nDeuxième paragraphe.\r\n\r\n3. Terminer\r\nDernière étape.')
@@ -18,4 +18,10 @@ test('headings and unstructured text stay plain text, including HTML-like conten
   assert.equal(parseSections('Simple texte.')[0].paragraphs[0], 'Simple texte.')
   assert.deepEqual(parseSections(''), [])
   assert.equal(readingMinutes('mot '.repeat(181)), 2)
+})
+
+test('notes and code do not shift the step numbers shown in the contents', () => {
+  const sections = documentSections('', [{type: 'section', title: 'First', text: 'A'}, {type: 'note', title: 'Note', text: 'B'}, {type: 'code', title: 'Command', text: 'C'}, {type: 'section', title: 'Second', text: 'D'}])
+  assert.deepEqual(sections.map(section => section.number), ['01', null, null, '02'])
+  assert.equal(documentSections('3. Original\nContent', null)[0].number, '3')
 })

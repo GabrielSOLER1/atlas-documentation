@@ -57,3 +57,19 @@ Les tests automatiques locaux ne prouvent pas le fonctionnement du DNS, du dép�
 - Utiliser `tests/internal.py` pour publication, journal et limitation des connexions sur la base isolée.
 - Tester la session à 30 minutes avec `tests/session.py`, uniquement dans le conteneur de validation nommé.
 - Importer le certificat public de l’autorité sur VM3 avant les essais HTTPS par le proxy interne.
+
+## Profils, domaine et roadmap
+
+- Vérifier le certificat pour `atlas.u5`, et la conservation de l’autorité déjà approuvée.
+- Migrer une copie d’une ancienne base deux fois : nombre de comptes et hachages inchangés, administrateur renommé, autres adresses conservées.
+- Tester `/profil` depuis le nom du compte ; enregistrer puis rouvrir les champs et préférences.
+- Vérifier une photo JPEG/PNG/WebP, le recadrage, la suppression, les images invalides et le refus sans CSRF.
+- Confirmer qu’un compte n’accède pas à la photo ou aux favoris d’un autre compte.
+- Ajouter un favori depuis une carte et le retrouver dans Mes favoris ; vérifier recherche et tri.
+- Ouvrir une étape de la roadmap, suivre son lien interne, cocher puis recharger : progression conservée.
+- Refuser la roadmap à un utilisateur ordinaire, y compris via l’API.
+- Contrôler le menu, le profil et le graphe à 390 px ; aucune largeur ne doit déborder.
+- Tester l’alerte de sortie d’un profil modifié sans enregistrer.
+- Vérifier la correspondance des numéros du sommaire avec les étapes, et la copie d’un exemple.
+
+Les scripts `tests/profile.py` et `tests/roadmap.py` utilisent les mêmes variables privées de validation que les autres tests. Ne pas exécuter les tests de mutation sur la base principale.
