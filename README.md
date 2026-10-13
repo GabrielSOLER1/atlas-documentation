@@ -73,28 +73,11 @@ The initial library includes ten guides about internal access, assistance, works
 
 ## Upgrading an existing installation
 
-Back up the database before updating. On startup, schema changes and recorded data migrations run transactionally. The domain migration replaces the previous internal domain with `atlas.u5`, converts the original Gabriel administrator to **`admin@atlas.u5`**, and sets its display name to **admin**. Existing passwords and unrelated account addresses are preserved. Previous sessions may require a new login.
+Back up the database before updating. On startup, schema changes and recorded data migrations run transactionally. The domain migration replaces the previous internal domain with `atlas.u5`, converts the original administrator account to **`admin@atlas.u5`**, and sets its display name to **admin**. Existing passwords and unrelated account addresses are preserved. Previous sessions may require a new login.
 
-Update your local `.env` and any private credential file to use the new account addresses. These files are intentionally outside Git. Ange must point internal DNS and the HTTPS proxy to **atlas.u5**. The certificate script automatically reissues an old-domain server certificate using the existing internal CA; clients that already trust that CA do not need a different authority.
+Update your local `.env` and any private credential file to use the new account addresses. These files are intentionally outside Git. Point internal DNS and the HTTPS proxy to **atlas.u5**. The certificate script automatically reissues an old-domain server certificate using the existing internal CA; clients that already trust that CA do not need a different authority.
 
 The default Compose project is now `atlas-documentation`. Existing users of a differently named Compose project must deliberately migrate their database export into the new project, or continue temporarily with their previous `COMPOSE_PROJECT_NAME`. Changing the Compose name alone creates a different database volume. Do not remove the old volume before checking the restored data. See the recovery guide.
-
-## Publish the source on GitHub
-
-Create a private repository and grant Ange access. Publish the contents of this project folder, with `compose.yaml` at the repository root. Keep the existing `.gitignore`.
-
-The repository includes `backend/.env`, which contains development defaults only. Docker overrides them with private values from the root `.env`. The root `.env`, private certificates, backups, dependencies, generated builds and image archives are excluded. Never force-add these files or put real credentials in documentation or tests.
-
-Before publishing an existing installation, replace any previously shared demonstration passwords using the server command below. Removing credentials from source does not change database passwords or remove them from any already-published Git history.
-
-```sh
-docker compose exec --user www-data app php bin/console app:reset-password admin@atlas.u5
-docker compose exec --user www-data app php bin/console app:reset-password utilisateur@atlas.u5
-```
-
-These example addresses belong to the original installation; substitute the actual account email if needed. Enter and confirm a new password when prompted; input is hidden and the password is not a command-line argument. Existing sessions become invalid after the password change. This command runs only on the server and does not create a public password-reset endpoint.
-
-After the repository is available, Ange follows the quick start above. GitHub is used to transfer source code, not by the running portal.
 
 ## Internal deployment
 
@@ -111,7 +94,7 @@ Relevant `.env` settings:
 
 Both published ports bind to **127.0.0.1**. PostgreSQL has no published port and uses an isolated internal network. The application ingress network disables IP masquerading, and no external DNS resolver is configured for the application.
 
-For VM3 access, Ange must configure internal DNS and a reverse proxy on **VM1's private LAN address**. Forward all paths to `https://localhost:8443`, including `/api` and `/build`, and validate the upstream certificate against `certs/ca.crt`. Use a trusted internal certificate for the proxy's `atlas.u5` endpoint as well. Do not publish the service on an Internet-facing interface.
+For VM3 access, configure internal DNS and a reverse proxy on **VM1's private LAN address**. Forward all paths to `https://localhost:8443`, including `/api` and `/build`, and validate the upstream certificate against `certs/ca.crt`. Use a trusted internal certificate for the proxy's `atlas.u5` endpoint as well. Do not publish the service on an Internet-facing interface.
 
 See [the architecture report](docs/RAPPORT_ARCHITECTURE.md) and [internal integration notes](docs/INTERNAL_DEPLOYMENT.md).
 
@@ -148,6 +131,16 @@ Application events are stored in PostgreSQL and purged after 30 days when the jo
 
 A role change invalidates existing sessions. Deactivation blocks the next authenticated request. Sessions expire after 30 minutes of inactivity. Five failed attempts for the same identifier and network address block further attempts for 15 minutes.
 
+### Reset an account password
+
+Run this command on the server, substituting the account email if needed:
+
+```sh
+docker compose exec --user www-data app php bin/console app:reset-password admin@atlas.u5
+```
+
+Enter and confirm a new password when prompted; input is hidden. Existing sessions become invalid after the password change. This command does not create a public password-reset endpoint.
+
 ## Backup and recovery
 
 ```sh
@@ -155,7 +148,7 @@ sh scripts/export-db.sh
 sh scripts/restore-test.sh backups/ACTUAL_EXPORT_FILE.sql
 ```
 
-The first command prints the generated SQL file path. Exports include accounts, structured guides and application events. Keep exports private and pass them to Ange for the internal Restic backup.
+The first command prints the generated SQL file path. Exports include accounts, structured guides and application events. Keep exports private and include them in the internal Restic backup.
 
 The restore test uses a separate database, applies schema upgrades without creating missing content, and checks its data. It prints the command to serve that database on `https://localhost:8444`.
 
