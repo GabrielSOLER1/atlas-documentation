@@ -151,3 +151,5 @@ Les captures suivantes proviennent de la validation isolée, avec un profil et u
 - [Nouveau guide et sommaire](preuves/atlas_nouveau_guide.png).
 
 Le DNS et le reverse proxy internes doivent utiliser `atlas.u5` sur l’infrastructure d’Ange. Le navigateur local reste accessible par `https://localhost:8443` ; son certificat couvre aussi `atlas.u5`. Les procédures anglaises de démarrage et migration sont mises à jour dans le README.
+
+Le dernier clone du dépôt renommé a également été démarré avec une base entièrement neuve : HTTPS validé, un seul compte `admin@atlas.u5`, dix guides, profil sans photo et roadmap de douze nœuds sans coche initiale. Les installations temporaires ont été supprimées ; seuls les services Atlas Documentation restent démarrés.
