@@ -18,7 +18,7 @@ class ActivityController extends AbstractController
         $audit->prune();
         $days = $request->query->get('days', '7') === '30' ? 30 : 7;
         $type = $request->query->get('type', 'all');
-        $allowed = ['login_success', 'login_failure', 'logout', 'user_created', 'user_updated', 'document_created', 'document_updated'];
+        $allowed = ['login_success', 'login_failure', 'logout', 'user_created', 'user_updated', 'document_created', 'document_updated', 'profile_updated'];
         if ($type !== 'all' && !in_array($type, $allowed, true)) { return $this->json(['error' => 'Filtre invalide.'], 400); }
         $db = $database->connection();
         $where = "created_at >= CURRENT_TIMESTAMP - CAST(:days AS integer) * INTERVAL '1 day'";

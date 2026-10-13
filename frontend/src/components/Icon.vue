@@ -1,6 +1,12 @@
 <script setup>
 defineProps({ name: { type: String, default: 'book' }, size: { type: Number, default: 20 } })
 const paths = {
+  bookmark: ['M5 3h14v18l-7-4-7 4z'],
+  camera: ['M3 7h4l2-3h6l2 3h4v13H3z', 'M16 13a4 4 0 1 1-8 0 4 4 0 0 1 8 0'],
+  menu: ['M3 6h18', 'M3 12h18', 'M3 18h18'],
+  route: ['M6 5h.01', 'M18 19h.01', 'M6 8v4a3 3 0 0 0 3 3h6a3 3 0 0 1 3 3', 'M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0', 'M21 19a3 3 0 1 1-6 0 3 3 0 0 1 6 0'],
+  copy: ['M9 9h12v12H9z', 'M5 15H3V3h12v2'],
+  print: ['M6 9V3h12v6', 'M6 17H3V9h18v8h-3', 'M6 14h12v7H6z'],
   layers: ['m12 3 10 6-10 6L2 9z', 'm2 14 10 6 10-6'],
   help: ['M9 9a3 3 0 0 1 6 0c0 2-3 2-3 5', 'M12 18h.01', 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0'],
   activity: ['M3 12h4l3-8 4 16 3-8h4'],

@@ -15,7 +15,7 @@ class UserProvider implements UserProviderInterface
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         // Check activation whenever the session is refreshed.
-        $query = $this->database->connection()->prepare('SELECT id, email, password, name, role FROM users WHERE lower(email) = :email AND active = TRUE');
+        $query = $this->database->connection()->prepare('SELECT id, email, password, name, role, department, job_title, bio, reading_size, accent, avatar_version, avatar IS NOT NULL AS has_avatar FROM users WHERE lower(email) = :email AND active = TRUE');
         $query->execute(['email' => strtolower(trim($identifier))]);
         $row = $query->fetch();
         if (!$row) {
@@ -23,7 +23,7 @@ class UserProvider implements UserProviderInterface
             $exception->setUserIdentifier($identifier);
             throw $exception;
         }
-        return new User($row['email'], $row['password'], $row['name'], $row['role'], (int) $row['id']);
+        return new User($row['email'], $row['password'], $row['name'], $row['role'], (int) $row['id'], $row);
     }
 
     public function refreshUser(UserInterface $user): UserInterface

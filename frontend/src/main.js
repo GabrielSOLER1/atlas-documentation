@@ -10,6 +10,8 @@ import UsersView from './views/UsersView.vue'
 import CategoriesView from './views/CategoriesView.vue'
 import InformationView from './views/InformationView.vue'
 import ActivityView from './views/ActivityView.vue'
+import ProfileView from './views/ProfileView.vue'
+import RoadmapView from './views/RoadmapView.vue'
 import { session, refreshSession } from './api'
 import './style.css'
 
@@ -20,6 +22,9 @@ const router = createRouter({
     { path: '/connexion', component: LoginView, meta: { public: true } },
     { path: '/', component: DocumentsView },
     { path: '/categories', component: CategoriesView },
+    { path: '/favoris', component: DocumentsView },
+    { path: '/profil', component: ProfileView },
+    { path: '/roadmap', component: RoadmapView, meta: { admin: true } },
     { path: '/aide', component: InformationView, meta: { public: true } },
     { path: '/confidentialite', component: InformationView, meta: { public: true } },
     { path: '/comptes', component: UsersView, meta: { admin: true } },
@@ -37,5 +42,9 @@ router.beforeEach(async to => {
   if (!to.meta.public && !session.user) return '/connexion'
   if (to.meta.admin && !session.user?.admin) return '/acces-refuse'
   if (to.path === '/connexion' && session.user) return '/'
+})
+router.afterEach(to => {
+  const titles = { '/': 'Bibliothèque', '/connexion': 'Connexion', '/profil': 'Mon profil', '/favoris': 'Mes favoris', '/roadmap': 'Roadmap administrateur', '/comptes': 'Comptes & accès', '/activite': 'Journal d’activité', '/categories': 'Catégories', '/aide': 'Aide', '/confidentialite': 'Confidentialité & RGPD' }
+  document.title = `${titles[to.path] || (to.path.startsWith('/procedures/') ? 'Documentation' : 'Page indisponible')} · Atlas Documentation`
 })
 createApp(App).use(router).mount('#app')

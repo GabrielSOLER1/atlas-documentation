@@ -1,0 +1,209 @@
+{
+  "title": "Administrer Atlas, étape par étape",
+  "nodes": [
+    {
+      "id": "besoin",
+      "title": "Clarifier le besoin",
+      "subtitle": "Commencer par le bon sujet",
+      "phase": 1,
+      "x": 450,
+      "y": 70,
+      "steps": [
+        "Choisissez une tâche précise qu’un collaborateur doit réaliser.",
+        "Identifiez le public, les prérequis et le résultat attendu.",
+        "Recherchez un guide existant avant d’en créer un nouveau."
+      ],
+      "link": "/",
+      "actionLabel": "Explorer la bibliothèque",
+      "code": null,
+      "main": true
+    },
+    {
+      "id": "priorite",
+      "title": "Définir la priorité",
+      "subtitle": "Utilité avant quantité",
+      "phase": 1,
+      "x": 150,
+      "y": 70,
+      "steps": [
+        "Traitez d’abord les questions fréquentes et les tâches sensibles.",
+        "Évitez de copier un contenu obsolète ou propre à un autre environnement.",
+        "Choisissez une personne qui pourra relire la procédure."
+      ],
+      "link": "/categories",
+      "actionLabel": "Parcourir les thèmes",
+      "code": null,
+      "main": false
+    },
+    {
+      "id": "structure",
+      "title": "Construire le plan",
+      "subtitle": "Un chemin facile à suivre",
+      "phase": 2,
+      "x": 450,
+      "y": 220,
+      "steps": [
+        "Rédigez un titre qui décrit une action.",
+        "Ajoutez un résumé, une catégorie et les prérequis.",
+        "Découpez la tâche en étapes courtes, dans l’ordre de réalisation."
+      ],
+      "link": "/procedures/nouveau",
+      "actionLabel": "Préparer un guide",
+      "code": null,
+      "main": true
+    },
+    {
+      "id": "blocs",
+      "title": "Choisir les blocs",
+      "subtitle": "Donner du relief au contenu",
+      "phase": 2,
+      "x": 750,
+      "y": 220,
+      "steps": [
+        "Utilisez une section pour chaque étape et une note pour une précaution.",
+        "Utilisez une checklist pour les points à vérifier et un bloc code pour une commande.",
+        "Évitez les informations confidentielles, mots de passe et données personnelles."
+      ],
+      "link": "/procedures/nouveau",
+      "actionLabel": "Ouvrir l’éditeur",
+      "code": null,
+      "main": false
+    },
+    {
+      "id": "redaction",
+      "title": "Rédiger et relire",
+      "subtitle": "Des instructions vérifiables",
+      "phase": 3,
+      "x": 450,
+      "y": 370,
+      "steps": [
+        "Décrivez les actions avec les noms réellement visibles dans les outils.",
+        "Indiquez le résultat attendu après chaque action importante.",
+        "Consultez l’aperçu avant de publier pour vérifier la lisibilité."
+      ],
+      "link": "/procedures/nouveau",
+      "actionLabel": "Composer une documentation",
+      "code": null,
+      "main": true
+    },
+    {
+      "id": "validation",
+      "title": "Tester le parcours",
+      "subtitle": "Une procédure qui fonctionne",
+      "phase": 3,
+      "x": 150,
+      "y": 370,
+      "steps": [
+        "Faites suivre le guide par une personne du public concerné.",
+        "Vérifiez les commandes sur un environnement adapté avant de les recommander.",
+        "Corrigez les ambiguïtés et confirmez les résultats attendus."
+      ],
+      "link": "/aide",
+      "actionLabel": "Consulter les repères",
+      "code": null,
+      "main": false
+    },
+    {
+      "id": "publication",
+      "title": "Publier le guide",
+      "subtitle": "Rendre le savoir disponible",
+      "phase": 4,
+      "x": 450,
+      "y": 520,
+      "steps": [
+        "Publiez uniquement après validation du contenu et de sa présentation.",
+        "Vérifiez la catégorie, le résumé et le sommaire sur la page de lecture.",
+        "Réouvrez le guide depuis la bibliothèque et vérifiez la date de mise à jour."
+      ],
+      "link": "/",
+      "actionLabel": "Vérifier la bibliothèque",
+      "code": null,
+      "main": true
+    },
+    {
+      "id": "lecture",
+      "title": "Soigner la consultation",
+      "subtitle": "Retrouver et partager en interne",
+      "phase": 4,
+      "x": 750,
+      "y": 520,
+      "steps": [
+        "Vérifiez la recherche, les catégories et l’affichage sur un petit écran.",
+        "Gardez vos procédures récurrentes dans vos favoris.",
+        "Pour une copie papier, utilisez le bouton d’impression du guide."
+      ],
+      "link": "/favoris",
+      "actionLabel": "Ouvrir mes favoris",
+      "code": null,
+      "main": false
+    },
+    {
+      "id": "acces",
+      "title": "Administrer les comptes",
+      "subtitle": "Attribuer les bons droits",
+      "phase": 5,
+      "x": 450,
+      "y": 670,
+      "steps": [
+        "Créez les comptes depuis Comptes & accès, sans inscription publique.",
+        "Attribuez le rôle utilisateur par défaut et administrateur uniquement si nécessaire.",
+        "Désactivez les accès qui ne sont plus utiles et conservez un administrateur actif."
+      ],
+      "link": "/comptes",
+      "actionLabel": "Gérer les accès",
+      "code": null,
+      "main": true
+    },
+    {
+      "id": "journal",
+      "title": "Consulter l’activité",
+      "subtitle": "Observer les événements utiles",
+      "phase": 5,
+      "x": 150,
+      "y": 670,
+      "steps": [
+        "Vérifiez les tentatives refusées et les connexions inhabituelles.",
+        "Un identifiant saisi lors d’un échec ne prouve pas l’identité de son auteur.",
+        "Utilisez les filtres ; ne détournez pas le journal pour mesurer la performance."
+      ],
+      "link": "/activite",
+      "actionLabel": "Ouvrir le journal",
+      "code": null,
+      "main": false
+    },
+    {
+      "id": "maintenance",
+      "title": "Maintenir le portail",
+      "subtitle": "Garder des guides fiables",
+      "phase": 6,
+      "x": 450,
+      "y": 820,
+      "steps": [
+        "Relisez les procédures lorsque les outils ou l’organisation évoluent.",
+        "Vérifiez l’expiration des certificats et la disponibilité du service.",
+        "Contrôlez les sauvegardes et planifiez une restauration de validation."
+      ],
+      "link": "/",
+      "actionLabel": "Revoir les guides",
+      "code": "docker compose ps\nsh scripts/export-db.sh",
+      "main": true
+    },
+    {
+      "id": "restauration",
+      "title": "Vérifier la restauration",
+      "subtitle": "Une sauvegarde réellement utilisable",
+      "phase": 6,
+      "x": 750,
+      "y": 820,
+      "steps": [
+        "Exportez la base et conservez les fichiers privés dans une sauvegarde protégée.",
+        "Restaurez sur une base séparée : ne remplacez pas la base principale pour un essai.",
+        "Confirmez les comptes, guides et accès HTTPS sur la copie restaurée."
+      ],
+      "link": "/aide",
+      "actionLabel": "Lire l’aide",
+      "code": "sh scripts/restore-test.sh backups/ACTUAL_EXPORT_FILE.sql",
+      "main": false
+    }
+  ]
+}

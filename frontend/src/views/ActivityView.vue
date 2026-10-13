@@ -7,7 +7,7 @@ const days = ref('7')
 const type = ref('all')
 const busy = ref(false)
 const error = ref('')
-const types = { login_success: 'Connexion réussie', login_failure: 'Connexion refusée', logout: 'Déconnexion', user_created: 'Compte créé', user_updated: 'Compte mis à jour', document_created: 'Documentation créée', document_updated: 'Documentation modifiée' }
+const types = { login_success: 'Connexion réussie', login_failure: 'Connexion refusée', logout: 'Déconnexion', user_created: 'Compte créé', user_updated: 'Compte mis à jour', document_created: 'Documentation créée', document_updated: 'Documentation modifiée', profile_updated: 'Profil personnalisé' }
 const series = computed(() => {
   const byDate = Object.fromEntries((data.value?.series || []).map(point => [point.date, point]))
   const values = []

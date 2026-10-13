@@ -65,15 +65,17 @@ class PortalController extends AbstractController
     #[Route('/api/documents', methods: ['GET'])]
     public function documents(Database $database): JsonResponse
     {
-        $rows = $database->connection()->query('SELECT id, title, category, summary, updated_at FROM documents ORDER BY id')->fetchAll();
+        $query = $database->connection()->prepare('SELECT d.id, d.title, d.category, d.summary, d.updated_at, f.document_id IS NOT NULL AS favorite FROM documents d LEFT JOIN document_favorites f ON f.document_id = d.id AND f.user_id = :user ORDER BY d.updated_at DESC, d.id');
+        $query->execute(['user' => $this->getUser()->toArray()['id']]);
+        $rows = $query->fetchAll();
         return $this->json($rows);
     }
 
     #[Route('/api/documents/{id}', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function document(int $id, Database $database): JsonResponse
     {
-        $statement = $database->connection()->prepare('SELECT * FROM documents WHERE id = :id');
-        $statement->execute(['id' => $id]);
+        $statement = $database->connection()->prepare('SELECT d.*, f.document_id IS NOT NULL AS favorite FROM documents d LEFT JOIN document_favorites f ON f.document_id = d.id AND f.user_id = :user WHERE d.id = :id');
+        $statement->execute(['id' => $id, 'user' => $this->getUser()->toArray()['id']]);
         $document = $statement->fetch();
         if (!$document) { throw $this->createNotFoundException('Procédure inexistante.'); }
         $document['blocks'] = $document['blocks'] ? json_decode($document['blocks'], true, 32, JSON_THROW_ON_ERROR) : null;

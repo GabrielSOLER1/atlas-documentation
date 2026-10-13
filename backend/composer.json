@@ -6,6 +6,7 @@
     "php": ">=8.2",
     "ext-pdo": "*",
     "ext-pdo_pgsql": "*",
+    "ext-gd": "*",
     "symfony/console": "7.4.*",
     "symfony/dotenv": "7.4.*",
     "symfony/framework-bundle": "7.4.*",

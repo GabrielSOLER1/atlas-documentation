@@ -1,4 +1,4 @@
-# Atlas Internal Knowledge Portal
+# Atlas Documentation
 
 Internal documentation for Atlas Conseil, built with **Symfony 7.4, Vue 3, PostgreSQL 17 and Docker Compose**.
 
@@ -11,8 +11,8 @@ The application uses no external API, analytics service, CDN, remote font or ema
 Install Git, Docker with Docker Compose v2 and OpenSSL. Start Docker, then clone the private repository using a GitHub account that has access:
 
 ```sh
-git clone https://github.com/GabrielSOLER1/atlas-gabriel.git
-cd atlas-gabriel
+git clone https://github.com/GabrielSOLER1/atlas-documentation.git
+cd atlas-documentation
 ```
 
 If you already have the project folder, enter it directly. The repository root should contain `compose.yaml` and `scripts/start.sh`.
@@ -101,7 +101,7 @@ On the build workstation, prepare the images once:
 
 ```sh
 sh scripts/start.sh
-docker save -o atlas-images.tar atlas-gabriel-app:latest postgres:17-alpine
+docker save -o atlas-images.tar atlas-documentation-app:latest postgres:17-alpine
 ```
 
 Transfer the project and image archive through your internal transfer method. On the target server:

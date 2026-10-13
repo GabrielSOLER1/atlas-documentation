@@ -122,7 +122,7 @@ Les deux anciens accès du portail principal ont ensuite été renouvelés à la
 
 ### Publication et vérification du clone GitHub
 
-Les sources ont été publiées sur le dépôt privé [GabrielSOLER1/atlas-gabriel](https://github.com/GabrielSOLER1/atlas-gabriel), branche `main`. Les fichiers du premier commit ont été contrôlés : aucun secret privé, ancien mot de passe, certificat privé ou export SQL n’est inclus.
+Les sources ont été publiées sur le dépôt privé [GabrielSOLER1/atlas-documentation](https://github.com/GabrielSOLER1/atlas-documentation), branche `main`. Les fichiers du premier commit ont été contrôlés : aucun secret privé, ancien mot de passe, certificat privé ou export SQL n’est inclus.
 
 Un vrai clone du dépôt a démarré dans le projet isolé `atlas-git-clone-check`. Les services étaient sains ; le certificat HTTPS, les redirections, les cookies, les protections des accès anonymes et la 404 ont été vérifiés. La connexion avec l’administrateur généré sur cette installation a réussi ; la base contenait un administrateur et les deux guides initiaux. Les conteneurs et données de vérification ont été supprimés après les contrôles.
 

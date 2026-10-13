@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Security\User;
 use App\Service\Database;
 use App\Service\Migrations;
+use App\Service\DocumentContent;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AsCommand(name: 'app:init', description: 'Initializes the schema and first administrator without overwriting existing data.')]
 class InitializeCommand extends Command
 {
-    public function __construct(private Database $database, private UserPasswordHasherInterface $hasher, private Migrations $migrations)
+    public function __construct(private Database $database, private UserPasswordHasherInterface $hasher, private Migrations $migrations, private DocumentContent $content)
     {
         parent::__construct();
     }
@@ -36,8 +37,10 @@ class InitializeCommand extends Command
                 $insert = $db->prepare('INSERT INTO users (email, password, name, role) VALUES (:email, :password, :name, :role)');
                 $insert->execute(['email' => strtolower($email), 'password' => $this->hasher->hashPassword(new User($email, '', $name, 'ROLE_ADMIN'), $password), 'name' => $name, 'role' => 'ROLE_ADMIN']);
             }
-            $insert = $db->prepare('INSERT INTO documents (slug, title, category, summary, content) VALUES (:slug, :title, :category, :summary, :content) ON CONFLICT (slug) DO NOTHING');
-            foreach (require dirname(__DIR__, 2).'/database/documents.php' as $document) { $insert->execute($document); }
+            $insert = $db->prepare('INSERT INTO documents (slug, title, category, summary, content, blocks) VALUES (:slug, :title, :category, :summary, :content, :blocks) ON CONFLICT (slug) DO NOTHING');
+            foreach (require dirname(__DIR__, 2).'/database/documents.php' as $document) {
+                $insert->execute($this->content->validate($document) + ['slug' => $document['slug']]);
+            }
             $db->commit();
         } catch (\Throwable $exception) {
             $db->rollBack();

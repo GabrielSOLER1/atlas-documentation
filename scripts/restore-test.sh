@@ -8,8 +8,8 @@ fi
 restore_database="atlas_restore_$(date +%Y%m%d_%H%M%S)_$$"
 docker compose exec -T db sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" createdb -U "$POSTGRES_USER" "$1"' sh "$restore_database"
 docker compose exec -T db sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --single-transaction -U "$POSTGRES_USER" -d "$1"' sh "$restore_database" < "$1"
-# Upgrade the schema without seeding missing records.
-docker compose exec -T db sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --single-transaction -U "$POSTGRES_USER" -d "$1"' sh "$restore_database" < backend/database/schema.sql
+# Upgrade restored data without seeding missing records.
+docker compose run --rm --no-deps -e "DB_NAME=$restore_database" app php bin/console app:migrate
 docker compose run --rm --no-deps -e "DB_NAME=$restore_database" app php bin/console app:verify
 printf '\nBase de test restaurée : %s\n' "$restore_database"
 printf 'Pour consulter cette base dans le navigateur :\n'
